@@ -37,7 +37,7 @@ Lists all hardware implementation devices connected to your machine. Currently o
 This project is licensed to you under the GNU GPL V2+. See LICENSE.txt for more information
 
 ## Builds
-Linux-x64, win-x64 and osx-x64 are builds are available for download on my [website](https://www.vaughnnugent.com/resources/software). Build packages will be tar +gzipped (except for nuget packages). 
+Linux-x64, win-x64 and osx-x64 are builds are available for download on my [website](https://www.vaughnnugent.com/resources/software/modules/PkiAuthenticator). Build packages will be tar +gzipped (except for nuget packages). 
 
 *All downloads will contain a sha384 hash of the file by adding a .sha384 to the desired file download, eg: debug.tgz.sha384*
 *PGP signed downloads will be available eventually*
