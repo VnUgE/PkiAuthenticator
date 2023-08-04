@@ -1,0 +1,40 @@
+version: 24
+jobs:
+- name: Push to GitHub
+  steps:
+  - !PushRepository
+    name: GitHub Sync
+    remoteUrl: https://github.com/VnUgE/PkiAuthenticator.git
+    userName: VnUgE
+    passwordSecret: github-access-token
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !TagCreateTrigger
+    projects: PkiAuthenticator
+  - !BranchUpdateTrigger
+    projects: PkiAuthenticator
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
+- name: Pull from GitHub
+  steps:
+  - !PullRepository
+    name: Sync from GitHub
+    remoteUrl: https://github.com/VnUgE/PkiAuthenticator.git
+    syncToChildProject: false
+    userName: VnUgE
+    passwordSecret: github-access-token
+    refs: refs/heads/* refs/tags/*
+    withLfs: false
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  triggers:
+  - !ScheduleTrigger
+    cronExpression: 0 15 10 ? * *
+    projects: PkiAuthenticator
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
