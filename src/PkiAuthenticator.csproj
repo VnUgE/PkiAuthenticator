@@ -26,8 +26,8 @@
   <ItemGroup>
     <PackageReference Include="Serilog" Version="2.12.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="VNLib.Hashing.Portable" Version="0.1.0-ci0052" />
-    <PackageReference Include="VNLib.Utils" Version="0.1.0-ci0052" />
+    <PackageReference Include="VNLib.Hashing.Portable" Version="0.1.0-ci0063" />
+    <PackageReference Include="VNLib.Utils" Version="0.1.0-ci0063" />
     <PackageReference Include="Yubico.YubiKey" Version="1.7.0" />
   </ItemGroup>
 

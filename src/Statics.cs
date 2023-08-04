@@ -1,4 +1,24 @@
-﻿using System;
+﻿/*
+* Copyright (c) 2023 Vaughn Nugent
+* 
+* Package: PkiAuthenticator
+* File: Statics.cs 
+*
+* PkiAuthenticator is free software: you can redistribute it and/or modify 
+* it under the terms of the GNU General Public License as published
+* by the Free Software Foundation, either version 2 of the License,
+* or (at your option) any later version.
+*
+* PkiAuthenticator is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License 
+* along with PkiAuthenticator. If not, see http://www.gnu.org/licenses/.
+*/
+
+using System;
 using System.Linq;
 using System.Text;
 using System.Buffers;
@@ -64,7 +84,6 @@ namespace PkiAuthenticator
         /// Generats a signed VNLib authentication toke, used to authenticate against 
         /// web applications using the YubiKey
         /// </summary>
-        /// <param name="session"></param>
         /// <returns>The process exit code returning the status of the operation.</returns>
         public static int GenerateOtp(this IAuthenticator authenticator)
         {

@@ -1,4 +1,24 @@
-﻿using System;
+﻿/*
+* Copyright (c) 2023 Vaughn Nugent
+* 
+* Package: PkiAuthenticator
+* File: Program.cs 
+*
+* PkiAuthenticator is free software: you can redistribute it and/or modify 
+* it under the terms of the GNU General Public License as published
+* by the Free Software Foundation, either version 2 of the License,
+* or (at your option) any later version.
+*
+* PkiAuthenticator is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License 
+* along with PkiAuthenticator. If not, see http://www.gnu.org/licenses/.
+*/
+
+using System;
 
 using VNLib.Utils.Logging;
 
@@ -6,7 +26,7 @@ using static PkiAuthenticator.Statics;
 
 namespace PkiAuthenticator
 {
-    internal class Program
+    internal sealed class Program
     {
         public const string JWK_EXPORT_TEMPLATE = "You may copy your JWK public key\n\n{pk}\n";
         public const string TOKEN_PRINT_TEMPLATE = "You may copy your authentication token \n\n{tk}\n";
@@ -14,14 +34,19 @@ namespace PkiAuthenticator
         public const string SOFTWARE_PASSWORD_VAR_NAME = "CERT_PASSWORD";
         public const string PEM_EXPORT_TEMPLATE = "You may copy your public key\n\n{cert}\n";
 
-        const string HELP_MESSAGE = 
-@$" VAuth Copyright (c) Vaughn Nugent
-    Usage: vauth.exe <args>
+        const string HELP_MESSAGE = @$"
+    vauth Copyright © Vaughn Nugent <vnpublic@proton.me> https://www.vaughnnugent.com/resources/software
 
-        No args: Connects to the first PIV enabled YubiKey and requests slot 0x9a 
-                 sign a new authentication message for the default usename (cert CN),
-                 prompts the user for a pin (if enabled on device) and prints the 
-                 signed JWT authentication token to STDOUT.
+    Usage: vauth <flags>
+
+    A cross-platform hardware (YubiKey) or software backed authenticator for generating short lived 
+    OTPs for VNLib.Plugins.Essentials.Accounts enabled servers. This tool generates a signed Json Web 
+    Token (JWT) that can be used as a single factor authentication method for accounts that have a stored
+    public key. Currently the plugin requires JSON Web Keys (JWK) format for public keys. It requires
+    serial numbers, key-ids, and the public key itself, x509 is not used. You may use the --export
+    flag to export this public key in the required JWK format. This tool currently supports YubiKey
+    as a hardware authenticator, and PEM encoded x509 certificates as a software authenticator. You 
+    may use this tool to list your connected YubiKey devices, and their serial numbers.
         
     Command flags:
         
@@ -50,13 +75,14 @@ namespace PkiAuthenticator
         --private-key   <file>  The path to the private key file, may be password protected.
                                 This flag is only required in software mode.
 
-        --password <password?>  The password string (utf8 decoded) used to decrypt the PEM 
-                                private key file. WARNING! You should avoid using this flag 
-                                unless you have cli history disabled, otherwise your password 
-                                may be recovered from your history file. This allows you to 
-                                automate the authentication process. NOTE: consider setting the 
-                                {SOFTWARE_PASSWORD_VAR_NAME} environment variable before starting the 
-                                process instead.
+        --password <password?>  Set this flag if your private key is password protected. 
+                                The password string (utf8 decoded) used to decrypt the PEM 
+                                private key file. WARNING! You should avoid setting your password 
+                                after this flag unless you have cli history disabled, otherwise 
+                                your password may be recovered from your shell history file. This 
+                                allows you to automate the authentication process. NOTE: consider 
+                                setting the {SOFTWARE_PASSWORD_VAR_NAME} environment variable before 
+                                starting the process instead of supplying the password as a flag.
 
         --key        <serial>   Allows you to specify the serial number (int32) of the exact
                                 YubiKey to connect to if multiple keys are connected. (PIV must
@@ -76,7 +102,7 @@ namespace PkiAuthenticator
                                 required operations, a --pin flag must be set, or set the {YUBIKEY_PIN_ENV_VAR_NAME} 
                                 env variable. If an op error occurs, an exit code is returned.
 
-        -v, --verbose           Enables verbose logging to be writtento STDOUT, is overridden
+        -v, --verbose           Enables verbose logging to be written to STDOUT, is overridden
                                 by silent mode, and will override -d debug mode.
 
         -d, --debug             Enables debug logging to be written to STDOUT, is overridden by 
@@ -106,12 +132,12 @@ namespace PkiAuthenticator
             vauth.exe                       # default cert CN usename
             vauth.exe -u 'name@example.com' # specify username
             vauth.exe --key 1111111         # specify hardware key serial numer
-            vauth.exe -s > token.txt        # write token to a text file
+            vauth.exe -s > token.txt        # write token to a text file w/ silent mode
             vauth.exe --piv-slot 9C         # specify a differnt PIV slot on the yubikey (in hex)
             
             #software mode
             vauth.exe --software 'cert.pem' --private-key 'priv.pem'
-            vauth.exe --software 'cert.pem' --private-ke 'priv.pem' --password 'mypassword'
+            vauth.exe --software 'cert.pem' --private-key 'priv.pem' --password 'mypassword'
     
         Export public key:
             vauth.exe --export              # for JWK output
@@ -132,7 +158,7 @@ namespace PkiAuthenticator
                 return 0;
             }
 
-            Log.Information("vauth (c) 2023 Vaughn Nugent");
+            Log.Information("vauth © 2023 Vaughn Nugent");
 
             int exitCode = 1;
             try
@@ -146,11 +172,15 @@ namespace PkiAuthenticator
                     //Only continue if authenticator successfully initialized
                     if (CliArgs.HasArg("--list-devices"))
                     {
+                        Log.Verbose("Gathering device information");
+
                         //List devices flag
                         exitCode = authenticator.ListDevices();
                     }
                     else if (CliArgs.HasArg("-e") || CliArgs.HasArg("--export"))
                     {
+                        Log.Verbose("Exporting public key");
+
                         //Check for pem encoding flag
                         if (CliArgs.HasArg("pem"))
                         {
@@ -195,7 +225,7 @@ namespace PkiAuthenticator
                 }
             }
 
-            Log.Information("Exiting...");
+            Log.Verbose("Exiting...");
 
             return exitCode;
         }

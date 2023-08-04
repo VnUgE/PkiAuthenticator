@@ -1,0 +1,37 @@
+PKiAuthenticator aka vauth, Copyright (c) 2023 Vaughn Nugent
+
+PkiAuthenticator is free software: you can redistribute it and/or modify 
+it under the terms of the GNU General Public License as published
+by the Free Software Foundation, either version 2 of the License,
+or (at your option) any later version.
+
+PkiAuthenticator is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License 
+along with PkiAuthenticator. If not, see http://www.gnu.org/licenses/.
+
+
+Contact Information:
+
+Email: vnpublic@proton.me
+Website: http://www.vaughnnugent.com
+Documentation: https://www.vaughnnugent.com/resources/software/articles?tags=docs,_PkiAuthenticator
+Github Repository: https://github.com/VnUgE/pkiauthenticator
+
+
+Setup:
+
+To use this application, you must have .NET/6.0 runtime installed on your system. 
+It can be found here https://dotnet.microsoft.com/en-us/download. It must be installed globally
+for the application to work.
+
+Run the following command to read the man page
+vauth -h
+
+
+All set to get started! For more information, please visit the documentation link above, or 
+the github repository. If you would like to report a bug or a vulnerability, please send 
+me an email to the adress above.

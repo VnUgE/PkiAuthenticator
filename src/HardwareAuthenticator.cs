@@ -1,4 +1,24 @@
-﻿using System;
+﻿/*
+* Copyright (c) 2023 Vaughn Nugent
+* 
+* Package: PkiAuthenticator
+* File: HardwareAuthenticator.cs 
+*
+* PkiAuthenticator is free software: you can redistribute it and/or modify 
+* it under the terms of the GNU General Public License as published
+* by the Free Software Foundation, either version 2 of the License,
+* or (at your option) any later version.
+*
+* PkiAuthenticator is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+* General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License 
+* along with PkiAuthenticator. If not, see http://www.gnu.org/licenses/.
+*/
+
+using System;
 using System.Linq;
 using System.Text;
 using System.Buffers;
@@ -13,8 +33,6 @@ using Yubico.YubiKey.Piv;
 using VNLib.Utils;
 using VNLib.Utils.Logging;
 using VNLib.Utils.Extensions;
-using VNLib.Hashing;
-using VNLib.Hashing.IdentityUtility;
 
 using static PkiAuthenticator.Statics;
 
@@ -55,6 +73,8 @@ namespace PkiAuthenticator
         {
             IYubiKeyDevice? device;
 
+            Log.Debug("Using hardware authenticator");
+
             //User may select the serial of the specific key to use
             if (CliArgs.HasArg("--key") && int.TryParse(CliArgs.GetArg("--key"), out int serial))
             {
@@ -87,7 +107,7 @@ namespace PkiAuthenticator
                     KeyCollector = GetUserPinInput
                 };
 
-                Log.Debug("Connected to device {id}", device.SerialNumber!);
+                Log.Information("Connected to device {id}, using slot {slot}", device.SerialNumber!, PivSlot.ToString("x"));
 
                 //Store the key algorithm
                 KeyAlgorithm = _session.GetMetadata(PivSlot).Algorithm;
@@ -129,7 +149,8 @@ namespace PkiAuthenticator
         public X509Certificate2 GetCertificate() =>
             _session?.GetCertificate(PivSlot)
             ?? throw new InvalidOperationException("The PIV session has not been successfully initialized");
-      
+
+        ///<inheritdoc/>
         protected override void Free()
         {
             _session?.Dispose();
