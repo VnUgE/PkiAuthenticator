@@ -10,7 +10,7 @@ vars:
 tasks:
   
   #when build succeeds, archive the output into a tgz 
-  postbuild_sucess:
+  postbuild_success:
     dir: '{{.USER_WORKING_DIR}}'
 
     cmds:
