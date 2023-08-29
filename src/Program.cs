@@ -37,6 +37,9 @@ namespace PkiAuthenticator
         const string HELP_MESSAGE = @$"
     vauth Copyright © Vaughn Nugent <vnpublic@proton.me> https://www.vaughnnugent.com/resources/software
 
+    This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to
+    redistribute it under certain conditions. See the license.txt file for more details.
+
     Usage: vauth <flags>
 
     A cross-platform hardware (YubiKey) or software backed authenticator for generating short lived 
