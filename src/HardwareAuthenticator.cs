@@ -256,8 +256,6 @@ namespace PkiAuthenticator
 
                 //Write s to the end of the buffer, zero padding exists from stackalloc
                 s.CopyTo(concatBuffer[rlen..][(rlen - slen)..]);
-
-                Console.WriteLine("r larger");
             }
             else if (rlen < slen)
             {
@@ -266,8 +264,6 @@ namespace PkiAuthenticator
 
                 //Write s to the end of the buffer, zero padding exists from stackalloc
                 s.CopyTo(concatBuffer[slen..]);
-
-                Console.WriteLine("s larger");
             }
             else
             {
