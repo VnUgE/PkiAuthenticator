@@ -66,10 +66,8 @@ tasks:
     vars:
       BUILD_DIR: "{{.USER_WORKING_DIR}}/bin/{{.BUILD_MODE}}/{{.TARGET_FRAMEWORK}}/{{.TARGET_OS}}/publish"
     internal: true
-    cmds:
-     
+    cmds:     
      #copy license and readme to target
-     - cd .. && powershell -Command "Copy-Item -Path ./LICENSE.txt -Destination '{{.BUILD_DIR}}/license.txt'"
      - cd .. && powershell -Command "Copy-Item -Path ./build.readme.txt -Destination '{{.BUILD_DIR}}/readme.txt'"
 
      #tar outputs
@@ -79,8 +77,7 @@ tasks:
 #Remove the output dirs on clean
   clean:
     dir: '{{.USER_WORKING_DIR}}'
+    ignore_error: true
     cmds:
      - cmd: powershell Remove-Item -Recurse './bin'
-       ignore_error: true
      - cmd: powershell Remove-Item -Recurse './obj'
-       ignore_error: true

@@ -15,19 +15,31 @@
     <Authors>Vaughn Nugent</Authors>
     <Company>Vaughn Nugent</Company>
     <Product>PkiAuthenticator aka vauth</Product>
-    <Description>
-      A command line tool for generating certificate-based, signed, One-Time-Passwords for web/service authentication, with YubiKey support by default.
-    </Description>
+    <Description>A command line tool for generating certificate-based, signed, One-Time-Passwords for web/service authentication, with YubiKey support by default.</Description>
     <Copyright>Copyright © 2023 Vaughn Nugent</Copyright>
     <PackageProjectUrl>https://www.vaughnnugent.com/resources/software/modules/vauth</PackageProjectUrl>
     <RepositoryUrl>https://github.com/VnUgE/PkiAuthenticator</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE.txt">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="Serilog" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
-    <PackageReference Include="VNLib.Hashing.Portable" Version="0.1.0-ci0070" />
-    <PackageReference Include="VNLib.Utils" Version="0.1.0-ci0070" />
+    <PackageReference Include="VNLib.Hashing.Portable" Version="0.1.0-ci0080" />
+    <PackageReference Include="VNLib.Utils" Version="0.1.0-ci0080" />
     <PackageReference Include="Yubico.YubiKey" Version="1.8.0" />
   </ItemGroup>
 
