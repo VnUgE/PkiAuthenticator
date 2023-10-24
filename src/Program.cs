@@ -21,6 +21,7 @@
 using System;
 
 using VNLib.Utils.Logging;
+using VNLib.Utils.Memory;
 
 using static PkiAuthenticator.Statics;
 
@@ -115,6 +116,10 @@ namespace PkiAuthenticator
         {SOFTWARE_PASSWORD_VAR_NAME}    The password used to decrypt the PEM encoded private key file in software mode
         
         {YUBIKEY_PIN_ENV_VAR_NAME}      Your secret pin used for protected yubikey operations
+
+        {MemoryUtil.SHARED_HEAP_GLOBAL_ZERO}    Force all unmanaged heap allocations to be zero filled
+
+        {MemoryUtil.SHARED_HEAP_FILE_PATH}      Specify a custom unmanaged heap allocator DLL file path
         
 
     This tool was created to quickly generate short lived One-Time-Passwords (OTP) or signed

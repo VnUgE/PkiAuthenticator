@@ -30,6 +30,16 @@ tasks:
        vars: 
          BUILD_MODE: debug 
          TARGET_OS: osx-x64
+
+     - task: postbuild
+       vars: 
+         BUILD_MODE: debug 
+         TARGET_OS: linux-arm
+
+     - task: postbuild
+       vars: 
+         BUILD_MODE: debug 
+         TARGET_OS: linux-arm64
    
 
      #remove uncessary files from the release dir
@@ -50,6 +60,16 @@ tasks:
        vars: 
          BUILD_MODE: release 
          TARGET_OS: osx-x64
+    
+     - task: postbuild
+       vars: 
+         BUILD_MODE: release 
+         TARGET_OS: linux-arm
+
+     - task: postbuild
+       vars: 
+         BUILD_MODE: release 
+         TARGET_OS: linux-arm64
 
      #pack up source code and put in output
      - powershell -Command "Get-ChildItem -Include *.cs,*.csproj -Recurse | Where { \$_.FullName -notlike '*\obj\*' } | Resolve-Path -Relative | tar --files-from - -czf '{{.TARGET}}/src.tgz'"
