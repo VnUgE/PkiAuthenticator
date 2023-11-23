@@ -36,7 +36,7 @@ namespace PkiAuthenticator
         public const string PEM_EXPORT_TEMPLATE = "You may copy your public key\n\n{cert}\n";
 
         const string HELP_MESSAGE = @$"
-    vauth Copyright © Vaughn Nugent <vnpublic@proton.me> https://www.vaughnnugent.com/resources/software
+    vauth Copyright (c) Vaughn Nugent <vnpublic@proton.me> https://www.vaughnnugent.com/resources/software
 
     This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to
     redistribute it under certain conditions. See the license.txt file for more details.
@@ -160,7 +160,7 @@ namespace PkiAuthenticator
 
         static int Main(string[] args)
         {
-            if (CliArgs.HasArg("-h") || CliArgs.HasArg("--help"))
+            if (CliArgs.HasArgument("-h") || CliArgs.HasArgument("--help"))
             {
                 Console.WriteLine(HELP_MESSAGE);
                 return 0;
@@ -172,25 +172,25 @@ namespace PkiAuthenticator
             try
             {
                 //Get software or hardware authenticator
-                using IAuthenticator authenticator = CliArgs.HasArg("--software") ? new SoftwareAuthenticator() : new HardwareAuthenticator();
+                using IAuthenticator authenticator = CliArgs.HasArgument("--software") ? new SoftwareAuthenticator() : new HardwareAuthenticator();
 
                 //initialze the authenticator
                 if (authenticator.Initialize())
                 {
                     //Only continue if authenticator successfully initialized
-                    if (CliArgs.HasArg("--list-devices"))
+                    if (CliArgs.HasArgument("--list-devices"))
                     {
                         Log.Verbose("Gathering device information");
 
                         //List devices flag
                         exitCode = authenticator.ListDevices();
                     }
-                    else if (CliArgs.HasArg("-e") || CliArgs.HasArg("--export"))
+                    else if (CliArgs.HasArgument("-e") || CliArgs.HasArgument("--export"))
                     {
                         Log.Verbose("Exporting public key");
 
                         //Check for pem encoding flag
-                        if (CliArgs.HasArg("pem"))
+                        if (CliArgs.HasArgument("pem"))
                         {
                             string pem = authenticator.ExportPem();
                             Log.Information(PEM_EXPORT_TEMPLATE, pem);

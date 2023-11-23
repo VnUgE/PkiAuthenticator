@@ -55,7 +55,7 @@ namespace PkiAuthenticator
             get
             {
                 //Check for slot cli flag
-                string? slotArg = CliArgs.GetArg("--piv-slot");
+                string? slotArg = CliArgs.GetArgument("--piv-slot");
                 //Try hase from hex, otherwise default to the authentication slot
                 return byte.TryParse(slotArg, NumberStyles.HexNumber, null, out byte slotNum) ? slotNum : Yubico.YubiKey.Piv.PivSlot.Authentication;
             }
@@ -76,7 +76,7 @@ namespace PkiAuthenticator
             Log.Debug("Using hardware authenticator");
 
             //User may select the serial of the specific key to use
-            if (CliArgs.HasArg("--key") && int.TryParse(CliArgs.GetArg("--key"), out int serial))
+            if (CliArgs.HasArgument("--key") && int.TryParse(CliArgs.GetArgument("--key"), out int serial))
             {
                 Log.Debug("Loading device {d}", serial);
 
@@ -167,7 +167,7 @@ namespace PkiAuthenticator
             string? input;
 
             //Check if the user issued the pin as cli arg
-            if (CliArgs.HasArg("--pin"))
+            if (CliArgs.HasArgument("--pin"))
             {
                 //No retires allowed during cli, we dont want the device to lock out
                 if (keyData.IsRetry)
@@ -175,7 +175,7 @@ namespace PkiAuthenticator
                     return false;
                 }
 
-                input = CliArgs.GetArg("--pin");
+                input = CliArgs.GetArgument("--pin");
             }
             //Check for environment variable
             else if (Environment.GetEnvironmentVariable(Program.YUBIKEY_PIN_ENV_VAR_NAME) != null)
@@ -188,7 +188,7 @@ namespace PkiAuthenticator
                 input = Environment.GetEnvironmentVariable(Program.YUBIKEY_PIN_ENV_VAR_NAME);
             }
             //If the silent flag is set, a pin cli or env must be set, since we cannot write to STDOUT
-            else if (CliArgs.Silent)
+            else if (CliArgs.HasArgument("--silent") || CliArgs.HasArgument("-s"))
             {
                 return false;
             }

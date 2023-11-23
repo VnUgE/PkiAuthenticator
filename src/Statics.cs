@@ -47,7 +47,7 @@ namespace PkiAuthenticator
 
     internal static class Statics
     {
-        public static ProcessArguments CliArgs { get; } = new(Environment.GetCommandLineArgs());
+        public static ArgumentList CliArgs { get; } = new ArgumentList(Environment.GetCommandLineArgs());
 
         public static ILogProvider Log { get; } = GetLog();
 
@@ -56,11 +56,11 @@ namespace PkiAuthenticator
             LoggerConfiguration config = new();
 
             //Set min level from cli flags
-            if(CliArgs.Verbose)
+            if(CliArgs.HasArgument("--verbose") || CliArgs.HasArgument("-v"))
             {
                 config.MinimumLevel.Verbose();
             }
-            else if (CliArgs.Debug)
+            else if (CliArgs.HasArgument("--verbose") || CliArgs.HasArgument("-v"))
             {
                 config.MinimumLevel.Debug();
             }
@@ -70,7 +70,7 @@ namespace PkiAuthenticator
             }
 
             //Make sure the silent flag is not set
-            if(!CliArgs.Silent)
+            if(!CliArgs.HasArgument("--silent") || CliArgs.HasArgument("-s"))
             {
                 //Write to console for now
                 config.WriteTo.Console();
@@ -87,8 +87,8 @@ namespace PkiAuthenticator
         /// <returns>The process exit code returning the status of the operation.</returns>
         public static int GenerateOtp(this IAuthenticator authenticator)
         {
-            string? uid = CliArgs.GetArg("-u");
-            uid ??= CliArgs.GetArg("--user");
+            string? uid = CliArgs.GetArgument("-u");
+            uid ??= CliArgs.GetArgument("--user");
 
             HashAlg digest;
 
@@ -157,7 +157,7 @@ namespace PkiAuthenticator
                 Log.Information(Program.TOKEN_PRINT_TEMPLATE, jwt.Compile());
 
                 //If silent mode is enabled, write credential directly to stdout
-                if (CliArgs.Silent)
+                if (CliArgs.HasArgument("--silent") || CliArgs.HasArgument("-s"))
                 {
                     Console.Write(jwt.Compile());
                 }

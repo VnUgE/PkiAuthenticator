@@ -64,7 +64,7 @@ namespace PkiAuthenticator
             Log.Debug("Using software authenticator");
 
             //try to import the certificate file
-            string? cerFilePath = CliArgs.GetArg("--software");
+            string? cerFilePath = CliArgs.GetArgument("--software");
             if(cerFilePath == null)
             {
                 Log.Error("You must specify a file path following the --software flag");
@@ -78,7 +78,7 @@ namespace PkiAuthenticator
                 return false;
             }
 
-            string? privateKeyFile = CliArgs.GetArg("--private-key");
+            string? privateKeyFile = CliArgs.GetArgument("--private-key");
 
             if(privateKeyFile == null)
             {
@@ -96,15 +96,15 @@ namespace PkiAuthenticator
             ReadOnlySpan<char> password = null;
 
             //See if password is required
-            if (CliArgs.HasArg("--password"))
+            if (CliArgs.HasArgument("--password"))
             {
                 //encryption is required, get from arg, or from env var
-                string? pass = CliArgs.GetArg("--password") ?? Environment.GetEnvironmentVariable(Program.SOFTWARE_PASSWORD_VAR_NAME);
+                string? pass = CliArgs.GetArgument("--password") ?? Environment.GetEnvironmentVariable(Program.SOFTWARE_PASSWORD_VAR_NAME);
 
                 if (pass == null)
                 {
                     //if silent, we cant read the key, so we need to bail;
-                    if (CliArgs.Silent)
+                    if (CliArgs.HasArgument("--silent") || CliArgs.HasArgument("-s"))
                     {
                         return false;
                     }
