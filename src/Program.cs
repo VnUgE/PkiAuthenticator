@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright (c) 2023 Vaughn Nugent
+* Copyright (c) 2024 Vaughn Nugent
 * 
 * Package: PkiAuthenticator
 * File: Program.cs 
@@ -166,7 +166,7 @@ namespace PkiAuthenticator
                 return 0;
             }
 
-            Log.Information("vauth © 2023 Vaughn Nugent");
+            Log.Information("vauth © 2024 Vaughn Nugent");
 
             int exitCode = 1;
             try

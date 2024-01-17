@@ -3,7 +3,7 @@
 *A command line tool for generating certificate-based, signed, One-Time-Passwords for web/service authentication, with YubiKey support by default*
 
 ## What is Vauth?
-This repository contains source code for a .NET/6.0 command-line tool used to generate certificate-backed One-Time-Passwords (OTP) for client authentication. This method is a single (1) factor authentication based on a username (usually an email address) stored in a JsonWebToken (JWT) claim, that will be submitted to a server's PKI endpoint to authenticate your client. Extremely simple and most secure methods by default is the design goal of this tool.
+This repository contains source code for a .NET/8.0 command-line tool used to generate certificate-backed One-Time-Passwords (OTP) for client authentication. This method is a single (1) factor authentication based on a username (usually an email address) stored in a JsonWebToken (JWT) claim, that will be submitted to a server's PKI endpoint to authenticate your client. Extremely simple and most secure methods by default is the design goal of this tool.
 
 ### Hardware support
 This tool currently uses the Yubico core sdk for using PIV enabled YubiKey devices. Since certificate based authentication is required, your YubiKey device must be PIV enabled. This is the recommended way to generate OTPs (assuming you own a YubiKey). By default the 0x9A PIV is slot is used to sign OTPs, but you my override the slot number. (see `--help` for more info) If your slot is PIN protected, you will be prompted to enter it when required, but you my also specify it as an argument **not recommended**, or via an environment variable, to inline the authentication process. (see `--help` for more info)
