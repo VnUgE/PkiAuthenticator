@@ -90,6 +90,13 @@ namespace PkiAuthenticator
             string? uid = CliArgs.GetArgument("-u");
             uid ??= CliArgs.GetArgument("--user");
 
+            string? dataToSign = null;
+            if (CliArgs.HasArgument("--sign"))
+            {
+                Log.Information("Enter the data to sign: ");
+                dataToSign = Console.ReadLine();
+            }
+
             HashAlg digest;
 
             //Init the jwt header
@@ -133,17 +140,15 @@ namespace PkiAuthenticator
             {
                 //Default uid is the subjet name
                 uid ??= cert.SubjectName.Name.AsSpan().SliceAfterParam("=").ToString();
-
-                //Get random nonce for entropy
-                string nonce = RandomHash.GetRandomBase32(16);
-
+             
                 jwt.InitPayloadClaim()
                   .AddClaim("sub", uid)
-                  .AddClaim("n", nonce)
+                  .AddClaim("n", RandomHash.GetRandomBase32(16))
                   .AddClaim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds())
                   //Keyid is the hex sha1 of the certificate
                   .AddClaim("keyid", Convert.ToHexString(cert.GetCertHash(HashAlgorithmName.SHA1)))
                   .AddClaim("serial", cert.SerialNumber)
+                  .AddClaim("data", dataToSign!)
                   .CommitClaims();
             }
 

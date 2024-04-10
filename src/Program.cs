@@ -71,6 +71,11 @@ namespace PkiAuthenticator
                                 authenticating. If not specified, uses the certificates CN
                                 subject value.
 
+        --sign                  Enables entering custom data to add to the OTP before signing.
+                                This allows applications to add an extra layer of authentication
+                                security. If you application requires signing data, you must set
+                                this flag.  
+
         --software <cert file>  Runs the process using a software authenticator instead of 
                                 a YubiKey hardware authenticator. The cert file must be a 
                                 a valid x509 certificate with the public key. You must also
@@ -153,6 +158,9 @@ namespace PkiAuthenticator
 
             #software
             vauth.exe --software cert.pem --export pem
+
+        Sign data:
+            vauth.exe --sign                # sign data before generating OTP
 
         List devices:
             vauth.exe --list-devices        # only supported in hardware mode

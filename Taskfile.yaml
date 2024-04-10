@@ -14,62 +14,16 @@ tasks:
     dir: '{{.USER_WORKING_DIR}}'
 
     cmds:
-
-     #run post in debug mode
-     - task: postbuild
-       vars: 
-         BUILD_MODE: debug 
-         TARGET_OS: linux-x64
-
-     - task: postbuild
-       vars: 
-         BUILD_MODE: debug 
-         TARGET_OS: win-x64
-    
-     - task: postbuild
-       vars: 
-         BUILD_MODE: debug 
-         TARGET_OS: osx-x64
-
-     - task: postbuild
-       vars: 
-         BUILD_MODE: debug 
-         TARGET_OS: linux-arm
-
-     - task: postbuild
-       vars: 
-         BUILD_MODE: debug 
-         TARGET_OS: linux-arm64
-   
+     - for: ['linux-x64', 'win-x64', 'osx-x64', 'linux-arm', 'linux-arm64']
+       task: postbuild
+       vars: { BUILD_MODE: debug, TARGET_OS: '{{.ITEM}}'}
 
      #remove uncessary files from the release dir
      - powershell -Command "Get-ChildItem -Recurse '{{.RELEASE_DIR}}/' -Include *.pdb,*.xml | Remove-Item"
 
-     #run post in release mode
-     - task: postbuild
-       vars: 
-         BUILD_MODE: release 
-         TARGET_OS: linux-x64
-
-     - task: postbuild
-       vars: 
-         BUILD_MODE: release 
-         TARGET_OS: win-x64
-    
-     - task: postbuild
-       vars: 
-         BUILD_MODE: release 
-         TARGET_OS: osx-x64
-    
-     - task: postbuild
-       vars: 
-         BUILD_MODE: release 
-         TARGET_OS: linux-arm
-
-     - task: postbuild
-       vars: 
-         BUILD_MODE: release 
-         TARGET_OS: linux-arm64
+     - for: ['linux-x64', 'win-x64', 'osx-x64', 'linux-arm', 'linux-arm64']
+       task: postbuild
+       vars: { BUILD_MODE: release, TARGET_OS: '{{.ITEM}}'}
 
      #pack up source code and put in output
      - powershell -Command "Get-ChildItem -Include *.cs,*.csproj -Recurse | Where { \$_.FullName -notlike '*\obj\*' } | Resolve-Path -Relative | tar --files-from - -czf '{{.TARGET}}/src.tgz'"

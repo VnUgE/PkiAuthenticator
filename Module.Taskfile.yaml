@@ -5,7 +5,7 @@ version: '3'
 vars:
   INT_DIR: '{{.SCRATCH_DIR}}/obj/{{.MODULE_NAME}}/'
   TARGET: '{{.OUTPUT_DIR}}/{{.HEAD_SHA}}'
-  MS_ARGS: '--sc false /p:RunAnalyzersDuringBuild=false /p:IntermediateOutputPath="{{.INT_DIR}}" /p:UseCommonOutputDirectory=true /p:BuildInParallel=true /p:MultiProcessorCompilation=true'
+  MS_ARGS: '--self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=true /p:RunAnalyzersDuringBuild=false /p:IntermediateOutputPath="{{.INT_DIR}}" /p:UseCommonOutputDirectory=true /p:BuildInParallel=true /p:MultiProcessorCompilation=true'
 
 tasks:
 #called by build pipeline to sync repo
@@ -13,8 +13,8 @@ tasks:
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
      #force remove any local changes and overwite
-     - git remote update
      - git reset --hard  
+     - git remote update
      - git pull origin {{.BRANCH_NAME}} --verify-signatures 
     #re-write semver after hard reset
      - dotnet-gitversion.exe /updateprojectfiles
@@ -49,18 +49,12 @@ tasks:
     dir: '{{.USER_WORKING_DIR}}'
     internal: true
     cmds:
-     - dotnet publish -c debug -r win-x64 {{.BUILD_FLAGS}} {{.MS_ARGS}}
-     - dotnet publish -c debug -r linux-x64 {{.BUILD_FLAGS}} {{.MS_ARGS}}
-     - dotnet publish -c debug -r osx-x64 {{.BUILD_FLAGS}} {{.MS_ARGS}}
-     - dotnet publish -c debug -r linux-arm {{.BUILD_FLAGS}} {{.MS_ARGS}}
-     - dotnet publish -c debug -r linux-arm64 {{.BUILD_FLAGS}} {{.MS_ARGS}} 
+     - for: [win-x64, linux-x64, osx-x64, linux-arm, linux-arm64 ]
+       cmd: dotnet publish -c debug -r {{.ITEM}} {{.BUILD_FLAGS}} {{.MS_ARGS}}
 
   build_release:
     dir: '{{.USER_WORKING_DIR}}'
     internal: true
     cmds:
-     - dotnet publish -c release -r win-x64 {{.BUILD_FLAGS}} {{.MS_ARGS}}
-     - dotnet publish -c release -r linux-x64 {{.BUILD_FLAGS}} {{.MS_ARGS}}
-     - dotnet publish -c release -r osx-x64 {{.BUILD_FLAGS}} {{.MS_ARGS}}
-     - dotnet publish -c release -r linux-arm {{.BUILD_FLAGS}} {{.MS_ARGS}}
-     - dotnet publish -c release -r linux-arm64 {{.BUILD_FLAGS}} {{.MS_ARGS}}
+     - for: [win-x64, linux-x64, osx-x64, linux-arm, linux-arm64 ]
+       cmd: dotnet publish -c release -r {{.ITEM}} {{.BUILD_FLAGS}} {{.MS_ARGS}}
